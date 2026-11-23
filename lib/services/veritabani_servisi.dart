@@ -130,4 +130,20 @@ class VeritabaniServisi {
     final db = await veritabani;
     return db.delete('alinti', where: 'id = ?', whereArgs: [id]);
   }
+    Future<Kitap?> kitapGetir(int id) async {
+    final db = await veritabani;
+    final satirlar = await db.query('kitap', where: 'id = ?', whereArgs: [id]);
+    return satirlar.isEmpty ? null : Kitap.fromMap(satirlar.first);
+  }
+
+  Future<List<OkumaKaydi>> okumaKayitlariniGetir(int kitapId) async {
+    final db = await veritabani;
+    final satirlar = await db.query(
+      'okuma_kaydi',
+      where: 'kitapId = ?',
+      whereArgs: [kitapId],
+      orderBy: 'id DESC',
+    );
+    return satirlar.map(OkumaKaydi.fromMap).toList();
+  }
 }
